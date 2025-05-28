@@ -1,0 +1,107 @@
+---
+- name: Install Docker and Clone BuggyPi Repository
+  hosts: servers
+  become: yes
+  vars:
+    repo_url: "https://github.com/sanjayBala/buggypi.git"
+    repo_dest: "/opt/buggypi"
+    docker_users:
+      - "{{ ansible_user }}"
+
+  tasks:
+    - name: Update package cache (Ubuntu/Debian)
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install required packages (Ubuntu/Debian)
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - git
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker GPG key (Ubuntu/Debian)
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker repository (Ubuntu/Debian)
+      apt_repository:
+        repo: "deb [arch=arm64] https://download.docker.com/linux/ubuntu jammy stable"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker CE (Ubuntu/Debian)
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add users to docker group
+      user:
+        name: "{{ item }}"
+        groups: docker
+        append: yes
+      loop: "{{ docker_users }}"
+      when: docker_users is defined
+
+    - name: Create directory for repository
+      file:
+        path: "{{ repo_dest }}"
+        state: directory
+        mode: '0755'
+
+    - name: Clone BuggyPi repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_dest }}"
+        version: main
+        force: yes
+
+    - name: Set proper ownership of cloned repository
+      file:
+        path: "{{ repo_dest }}"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        recurse: yes
+
+    - name: Verify Docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Display Docker version
+      debug:
+        msg: "Docker installed successfully: {{ docker_version.stdout }}"
+
+    - name: Verify Docker Compose installation
+      command: docker compose version
+      register: docker_compose_version
+      changed_when: false
+
+    - name: Display Docker Compose version
+      debug:
+        msg: "Docker Compose installed successfully: {{ docker_compose_version.stdout }}"
+
+    - name: Display repository location
+      debug:
+        msg: "BuggyPi repository cloned to: {{ repo_dest }}" 
