@@ -1,0 +1,24 @@
+---
+- name: Deploy Speedtest Tracker
+  hosts: servers
+  become: true
+  vars:
+    speedtest_tracker_app_dir: "/opt/buggypi/docker-compose/speedtest-tracker"
+    speedtest_tracker_data_dir: "/home/buggy/apps/speedtest-tracker/data" # Path for persistent data
+
+  tasks:
+    - name: Ensure Speedtest Tracker data directory exists
+      ansible.builtin.file:
+        path: "{{ speedtest_tracker_data_dir }}"
+        state: directory
+        mode: '0755'
+
+    # The docker-compose.yaml is already present from the git clone
+    # in install-docker-and-clone.yml playbook. We just use its path.
+
+    - name: Bring up Speedtest Tracker stack
+      community.docker.docker_compose_v2:
+        project_src: "{{ speedtest_tracker_app_dir }}" # Path to the directory containing the docker-compose.yaml
+        state: present
+        pull: always
+        remove_orphans: true
