@@ -1,8 +1,9 @@
 ---
 title: "Dashboard"
 subtitle: "Homer Dashboard"
-logo: "logo.png"
-icon: "fas fa-skull-crossbones"
+# Using Font Awesome icon instead of logo file
+logo: "fas fa-rocket"
+icon: "fas fa-rocket"
 
 header: true
 footer: false
@@ -31,13 +32,13 @@ services:
     icon: "fas fa-chart-line"
     items:
       - name: "Grafana"
-        logo: "assets/tools/grafana.png"
+        icon: "fas fa-chart-area"  # Using FA icon instead of logo
         subtitle: "Metrics & Analytics"
         tag: "monitoring"
         url: "http://192.168.50.20:3000"
         target: "_blank"
       - name: "Speedtest Tracker"
-        logo: "assets/tools/speedtest.png"
+        icon: "fas fa-tachometer-alt"  # Using FA icon instead of logo
         subtitle: "Internet Speed Monitoring"
         tag: "network"
         url: "http://192.168.50.20:8080"
