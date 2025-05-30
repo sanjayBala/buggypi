@@ -1,0 +1,44 @@
+---
+title: "Dashboard"
+subtitle: "Homer Dashboard"
+logo: "logo.png"
+icon: "fas fa-skull-crossbones"
+
+header: true
+footer: false
+
+# Optional theme customization
+theme: default
+colors:
+  light:
+    highlight-primary: "#3367d6"
+    highlight-secondary: "#4285f4"
+    highlight-hover: "#5a95f5"
+  dark:
+    highlight-primary: "#3367d6"
+    highlight-secondary: "#4285f4"
+    highlight-hover: "#5a95f5"
+
+# Optional message
+message:
+  style: "is-dark"
+  title: "Welcome!"
+  content: "This is your new dashboard"
+
+# Services
+services:
+  - name: "Monitoring"
+    icon: "fas fa-chart-line"
+    items:
+      - name: "Grafana"
+        logo: "assets/tools/grafana.png"
+        subtitle: "Metrics & Analytics"
+        tag: "monitoring"
+        url: "http://192.168.50.20:3000"
+        target: "_blank"
+      - name: "Speedtest Tracker"
+        logo: "assets/tools/speedtest.png"
+        subtitle: "Internet Speed Monitoring"
+        tag: "network"
+        url: "http://192.168.50.20:8080"
+        target: "_blank" 
