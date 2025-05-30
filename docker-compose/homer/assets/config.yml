@@ -24,7 +24,7 @@ colors:
 message:
   style: "is-dark"
   title: "Welcome!"
-  content: "This is your new dashboard"
+  content: "Hermes Pi Control Center"
 
 # Services
 services:
